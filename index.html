@@ -42,7 +42,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hi Ash</title>
+    <title>Trivia Image Puzzle</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -63,10 +63,17 @@
             align-items: flex-start;
         }
         #game-header {
-            font-size: 18px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+            margin-bottom: 10px;
+        }
+        #game-description {
+            font-size: 16px;
             text-align: left;
             margin-bottom: 10px;
             max-width: 306px;
+            line-height: 1.5;
         }
         #grid {
             position: relative;
@@ -137,6 +144,24 @@
             font-size: 14px;
             cursor: pointer;
         }
+        #tile-guide {
+            display: grid;
+            grid-template-columns: repeat(3, 30px);
+            grid-template-rows: repeat(3, 30px);
+            gap: 2px;
+            margin-top: 20px;
+            width: 94px; /* 3 * 30px + 2 * 2px gap */
+        }
+        .tile-guide-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            background: #ddd;
+            border: 1px solid #999;
+        }
         #timer {
             font-size: 20px;
             margin: 10px 0;
@@ -167,10 +192,10 @@
 <body>
     <div id="game-container">
         <div id="game-area">
-            <div id="game-header">
-                How fast can you guess the person/place/thing. To help you reveal the picture, guess trivia questions. Each question correctly answered will reveal a square 1-9 corresponding to the last digit. (i.e how many sides does a triangle have will reveal the third square of the picture)
+            <h1 id="game-header">Person/Place/Thing Squared</h1>
+            <div id="game-description">
+            How fast can you guess the person/place/thing. To help you reveal the picture, guess trivia questions. Each question correctly answered will reveal a square 1-9 corresponding to the last digit. (i.e how many sides does a triangle have will reveal the third square of the picture)
             </div>
-            <h1>Dadda Loves Theo</h1>
             <div id="timer">Time: 0:00</div>
             <div id="grid">
                 <img id="image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Lapin_blanc.jpg/306px-Lapin_blanc.jpg" alt="Bunny Image">
@@ -211,6 +236,17 @@
         <div id="questions-container">
             <h2>Trivia Questions</h2>
             <ul id="questions-list"></ul>
+            <div id="tile-guide">
+                <div class="tile-guide-number">1</div>
+                <div class="tile-guide-number">2</div>
+                <div class="tile-guide-number">3</div>
+                <div class="tile-guide-number">4</div>
+                <div class="tile-guide-number">5</div>
+                <div class="tile-guide-number">6</div>
+                <div class="tile-guide-number">7</div>
+                <div class="tile-guide-number">8</div>
+                <div class="tile-guide-number">9</div>
+            </div>
         </div>
     </div>
 
@@ -320,7 +356,10 @@
         function checkGuess() {
             const userGuess = guessInput.value.trim().toLowerCase();
             if (userGuess === 'bunny' || userGuess === 'rabbit') {
-                messageDiv.textContent = 'Congratulations! You guessed correctly!';
+                const minutes = Math.floor(timeElapsed / 60);
+                const seconds = timeElapsed % 60;
+                const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                messageDiv.textContent = `Congratulations! You guessed correctly in ${timeString}!`;
                 document.getElementById('image').style.filter = 'none';
                 endGame();
             } else {
